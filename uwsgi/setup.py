@@ -5,7 +5,7 @@ import setup_util
 import os
 
 def start(args):
-  subprocess.Popen("uwsgi  -s /tmp/uwsgi.sock -w hello:app --http :8080 --master --processes " + str((args.max_threads * 2)) + " --log-level=critical", shell=True, cwd="wsgi")
+  subprocess.Popen("uwsgi  -s /tmp/uwsgi.sock -w hello:app --http :8080 --master --processes " + str((args.max_threads * 2)) + " ", shell=True, cwd="wsgi")
   return 0
 def stop():
   p = subprocess.Popen(['ps', 'aux'], stdout=subprocess.PIPE)
