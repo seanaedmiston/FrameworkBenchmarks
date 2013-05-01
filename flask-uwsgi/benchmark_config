@@ -1,5 +1,5 @@
 {
-  "framework": "flask",
+  "framework": "flask-uwsgi",
   "tests": [{
     "default": {
       "setup_file": "setup",

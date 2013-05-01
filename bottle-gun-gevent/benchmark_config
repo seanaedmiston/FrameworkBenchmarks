@@ -1,5 +1,5 @@
 {
-  "framework": "bottle",
+  "framework": "bottle-gun-gevent",
   "tests": [{
     "default": {
       "setup_file": "setup",

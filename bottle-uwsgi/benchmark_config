@@ -1,5 +1,5 @@
 {
-  "framework": "bottle",
+  "framework": "bottle-uwsgi",
   "tests": [{
     "default": {
       "setup_file": "setup",
