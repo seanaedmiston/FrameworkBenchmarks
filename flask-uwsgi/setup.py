@@ -4,7 +4,7 @@ import setup_util
 import os
 
 def start(args):
-  setup_util.replace_text("flask/app.py", "DBHOSTNAME", args.database_host)
+  setup_util.replace_text("flask-uwsgi/app.py", "DBHOSTNAME", args.database_host)
   subprocess.Popen("uwsgi -L -s /tmp/uwsgi.sock -w app:app --http :8080 --master --gevent " + str((args.max_threads * 2)) + " ", shell=True, cwd="flask-uwsgi")
   return 0
 
