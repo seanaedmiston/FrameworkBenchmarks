@@ -22,7 +22,7 @@ class Installer:
     #######################################
     self.__run_command("sudo apt-get update", True)
     self.__run_command("sudo apt-get upgrade", True)    
-    self.__run_command("sudo apt-get install build-essential libpcre3 libpcre3-dev libpcrecpp0 libssl-dev zlib1g-dev python-software-properties unzip git-core libcurl4-openssl-dev libbz2-dev libmysqlclient-dev mongodb-clients libreadline6-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev libgdbm-dev ncurses-dev automake libffi-dev htop libtool bison libevent-dev libgstreamer-plugins-base0.10-0 libgstreamer0.10-0 liborc-0.4-0 libwxbase2.8-0 libwxgtk2.8-0 libgnutls-dev libjson0-dev libmcrypt-dev libicu-dev cmake", True)
+    self.__run_command("sudo apt-get install build-essential libpcre3 libpcre3-dev libpcrecpp0 libssl-dev zlib1g-dev python-software-properties unzip git-core libcurl4-openssl-dev libbz2-dev libmysqlclient-dev mongodb-clients libreadline6-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev libgdbm-dev ncurses-dev automake libffi-dev htop libtool bison libevent-dev libgstreamer-plugins-base0.10-0 libgstreamer0.10-0 liborc-0.4-0 libwxbase2.8-0 libwxgtk2.8-0 libgnutls-dev libjson0-dev libmcrypt-dev libicu-dev cmake mercurial", True)
 
     self.__run_command("cp ../config/benchmark_profile ../../.bash_profile")
     self.__run_command("sudo sh -c \"echo '*               soft    nofile          8192' >> /etc/security/limits.conf\"")
@@ -52,6 +52,10 @@ class Installer:
     self.__run_command("sudo python setup.py install", cwd="pip-1.1")
     self.__run_command("sudo pip install MySQL-python==1.2.4")
     self.__run_command("sudo pip install simplejson==3.0.7")
+    self.__run_command("curl http://initd.org/psycopg/tarballs/PSYCOPG-2-5/psycopg2-2.5.tar.gz | tar xvz")
+    self.__run_command("sudo python setup.py install", cwd="psycopg2-2.5")
+    self.__run_command("git clone https://github.com/iiilx/django-psycopg2-pool.git")
+    self.__run_command("sudo python setup.py install", cwd="django-psycopg2-pool")
 
     #
     # nodejs
@@ -86,8 +90,8 @@ class Installer:
     #
     # go
     #
-
-    self.__run_command("curl http://go.googlecode.com/files/go1.1beta2.linux-amd64.tar.gz | tar xvz")
+    self.__run_command("hg clone -u 2489327864d7 https://code.google.com/p/go")
+    self.__run_command("./all.bash", cwd="go/src")
 
     #
     # Perl
@@ -153,10 +157,10 @@ class Installer:
     #
     # Nginx
     #
-    self.__run_command("curl http://nginx.org/download/nginx-1.2.7.tar.gz | tar xvz")
-    self.__run_command("./configure", cwd="nginx-1.2.7")
-    self.__run_command("make", cwd="nginx-1.2.7")
-    self.__run_command("sudo make install", cwd="nginx-1.2.7")
+    self.__run_command("curl http://nginx.org/download/nginx-1.4.0.tar.gz | tar xvz")
+    self.__run_command("./configure", cwd="nginx-1.4.0")
+    self.__run_command("make", cwd="nginx-1.4.0")
+    self.__run_command("sudo make install", cwd="nginx-1.4.0")
 
     #
     # Openresty (nginx with openresty stuff)
@@ -171,6 +175,7 @@ class Installer:
     #
 
     self.__run_command("sudo easy_install -U 'gunicorn==0.17.2'")
+    self.__run_command("sudo pip install --upgrade meinheld")
     self.__run_command("sudo easy_install -U 'eventlet==0.12.1'")
     self.__run_command("sudo pip install --upgrade 'gevent==0.13.8'")
 
@@ -318,7 +323,7 @@ class Installer:
     # Prerequisites
     ##############################
     yes | sudo apt-get update
-    yes | sudo apt-get install build-essential git libev-dev libpq-dev libreadline6-dev
+    yes | sudo apt-get install build-essential git libev-dev libpq-dev libreadline6-dev postgresql
     sudo sh -c "echo '*               soft    nofile          8192' >> /etc/security/limits.conf"
 
     ##############################
@@ -336,6 +341,17 @@ class Installer:
 
     # Insert data
     mysql -uroot -psecret < create.sql
+    
+    ##############################
+    # Postgres
+    ##############################
+    sudo useradd benchmarkdbuser -p benchmarkdbpass
+    sudo -u postgres psql template1 < create-postgres-database.sql
+    sudo -u benchmarkdbuser psql hello_world < create-postgres.sql
+    
+    sudo mv postgresql.conf /etc/postgresql/9.1/main/postgresql.conf
+    sudo mv pg_hba.conf /etc/postgresql/9.1/main/pg_hba.conf
+    sudo -u postgres -H /etc/init.d/postgresql restart
 
     ##############################
     # Weighttp

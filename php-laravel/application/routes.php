@@ -31,12 +31,12 @@
 |		});
 |
 */
+Route::controller(Controller::detect());
 
 Route::get('/json', function()
 {
     return Response::json(array('message' => 'Hello World!'));
 });
-
 
 Route::get('/db', function()
 {
@@ -50,6 +50,7 @@ Route::get('/db', function()
     return Response::json($worlds);
 });
 
+Route::get('/fortunes', 'bench@fortunes');
 
 /*
 |--------------------------------------------------------------------------
