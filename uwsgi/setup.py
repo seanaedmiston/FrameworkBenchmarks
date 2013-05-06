@@ -4,8 +4,12 @@ import sys
 import setup_util
 import os
 
+home = expanduser("~")
+
 def start(args):
   subprocess.Popen("uwsgi -L -s /tmp/uwsgi.sock -w hello:app --http :8080 --master --processes " + str((args.max_threads * 2)) + " ", shell=True, cwd="uwsgi")
+  subprocess.check_call("sudo /usr/local/nginx/sbin/nginx -c " + home + "/FrameworkBenchmarks/uwsgi/config/nginx.conf", shell=True)
+
   return 0
 def stop():
   p = subprocess.Popen(['ps', 'aux'], stdout=subprocess.PIPE)
