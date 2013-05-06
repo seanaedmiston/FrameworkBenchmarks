@@ -3,6 +3,7 @@ import subprocess
 import sys
 import setup_util
 import os
+from os.path import expanduser
 
 home = expanduser("~")
 
