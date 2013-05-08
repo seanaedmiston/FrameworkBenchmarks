@@ -3,7 +3,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from random import randint
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://benchmarkdbuser:benchmarkdbpass@DBHOSTNAME:3306/hello_world'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://benchmarkdbuser:benchmarkdbpass@192.168.0.12:3306/hello_world'
 db = SQLAlchemy(app)
 
 class World(db.Model):
